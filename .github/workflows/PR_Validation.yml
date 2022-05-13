@@ -128,11 +128,11 @@ jobs:
             # The URL is stored in the Github Secret named SFDX_INTEGRATION_URL
             # so here we store the URL into a text file
             - name: 'Authentication'
-              run: |
-                  echo "${SERVER_KEY_PASSWORD}" > server.key
-                  node_modules/sfdx-cli/bin/run auth:jwt:grant --clientid ${{ secrets.SALESFORCEPRODCLIENTID_QA }} --jwtkeyfile ./assets/server_build.key --username ${{ secrets.SALESFORCEPRODUSERNAME_QA }} --instanceurl ${{ secrets.SALESFORCEPRODINSTANCEURL_QA }} -a buildBx
               env:
-                SERVER_KEY_PASSWORD: ${{ secrets.SERVER_KEY_PASSWORD }}
+                CLIENT_ID: ${{ secrets.SALESFORCEPRODCLIENTID_QA }}
+                USERNAME: ${{ secrets.SALESFORCEPRODUSERNAME_QA }}
+                INSTANCE_URL: ${{ secrets.SALESFORCEPRODINSTANCEURL_QA }}
+              run: sfdx force:auth:jwt:grant --clientid $CLIENT_ID --jwtkeyfile ./assets/server_build.key --username $USERNAME --instanceurl $INSTANCE_URL -a buildBx
 
             # We use SFDX Git Delta to create a directory with only the metadata that has changed.
             # this allows us to deploy only those changes, as opposed to deploying the entire branch. 
